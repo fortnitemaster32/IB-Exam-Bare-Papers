@@ -645,6 +645,8 @@ footer p{
   h1{font-size:1.6rem}
   .settings-grid{flex-direction:column;gap:0.75rem}
   .file-row{grid-template-columns:1fr;gap:0.35rem}
+  .btn-remove{position:absolute;top:0.4rem;right:0.4rem}
+  .file-row{position:relative}
   .actions{flex-direction:column}
   .btn{justify-content:center}
   .stats-bar{flex-wrap:wrap;gap:0.75rem}
@@ -1237,6 +1239,7 @@ function renderFileList() {
   container.innerHTML = '';
 
   filesToProcess.forEach((file, idx) => {
+    if (results[idx] && results[idx]._removing) return;
     const row = document.createElement('div');
     row.className = 'file-row';
     row.id = 'file-row-' + idx;
@@ -1259,13 +1262,17 @@ function renderFileList() {
       // Also provide download for the original if they want it
     }
 
+    const removeBtn = '<button class="btn-remove" data-idx="' + idx + '" title="Remove this file">' +
+      '<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>';
+
     row.innerHTML =
       '<div class="file-info">' +
         '<div class="file-name" title="' + escapeHtml(file.name) + '">' + escapeHtml(file.name) + '</div>' +
         '<div class="file-meta">' + renderMetaTags(meta) + '</div>' +
         pagesHTML +
       '</div>' +
-      '<div class="file-status-column">' + statusHTML + '</div>';
+      '<div class="file-status-column">' + statusHTML + '</div>' +
+      removeBtn;
 
     container.appendChild(row);
   });
@@ -1282,8 +1289,31 @@ function renderFileList() {
     });
   });
 
+  // Remove file handlers
+  container.querySelectorAll('.btn-remove').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const idx = parseInt(this.dataset.idx);
+      removeFile(idx);
+    });
+  });
+
   document.getElementById('fileCount').textContent = filesToProcess.length + ' file' + (filesToProcess.length !== 1 ? 's' : '');
   document.getElementById('fileListSection').style.display = 'block';
+}
+
+function removeFile(idx) {
+  if (isProcessing) return;
+  results[idx] = { _removing: true };
+  filesToProcess.splice(idx, 1);
+  results.splice(idx, 1);
+  renderFileList();
+  updateStats();
+  updateButtonStates();
+  if (filesToProcess.length === 0) {
+    document.getElementById('fileListSection').style.display = 'none';
+    document.getElementById('statsBar').style.display = 'none';
+  }
 }
 
 function updateStats() {
