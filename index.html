@@ -1334,7 +1334,8 @@ async function handleProcessAll() {
   document.getElementById('btnProcess').disabled = true;
   document.getElementById('btnProcess').textContent = 'Processing\u2026';
 
-  const skipPages = parseInt(document.getElementById('skipPages').value) || 2;
+  let skipPages = parseInt(document.getElementById('skipPages').value, 10);
+  if (isNaN(skipPages) || skipPages < 0) skipPages = 2;
   const yearOverride = document.getElementById('yearOverride').value.trim();
 
   for (let i = 0; i < filesToProcess.length; i++) {
