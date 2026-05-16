@@ -1329,7 +1329,7 @@ function addFiles(fileList) {
    UI — processing
    ====================================================== */
 async function handleProcessAll() {
-  if (isProcessing) return;
+  if (isProcessing || filesToProcess.length === 0) return;
   isProcessing = true;
   document.getElementById('btnProcess').disabled = true;
   document.getElementById('btnProcess').textContent = 'Processing\u2026';
@@ -1360,7 +1360,7 @@ async function handleProcessAll() {
   }
 
   isProcessing = false;
-  document.getElementById('btnProcess').disabled = false;
+  updateButtonStates();
   document.getElementById('btnProcess').innerHTML =
     '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8l3 3 5-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg> Process All';
 }
@@ -1496,6 +1496,7 @@ document.getElementById('infoCardToggle').addEventListener('click', function() {
   chevron.classList.toggle('open', !isOpen);
 });
 
+updateButtonStates();
 console.log('IB Exam Bare Papers ready. Drop your PDFs to begin.');
 </script>
 </body>
