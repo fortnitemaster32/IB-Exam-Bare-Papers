@@ -1,0 +1,5 @@
+# No build artifacts — single HTML file project
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
