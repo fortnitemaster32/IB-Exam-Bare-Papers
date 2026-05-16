@@ -2,6 +2,8 @@
 
 A fully client-side web tool that strips cover pages, instruction sheets, and blank pages from IB exam PDFs, then adds a metadata label on the first page. Everything runs in the browser — no uploads, no server, no installation.
 
+Use it here: **[fortnitemaster32.github.io/IB-Exam-Bare-Papers](https://fortnitemaster32.github.io/IB-Exam-Bare-Papers)**
+
 ## Usage
 
 1. Open `index.html` in any modern browser.
