@@ -1338,11 +1338,6 @@ async function handleProcessAll() {
   const yearOverride = document.getElementById('yearOverride').value.trim();
 
   for (let i = 0; i < filesToProcess.length; i++) {
-    if (results[i] && (results[i].status === 'done' || results[i].status === 'error' || results[i].status === 'skipped')) {
-      continue;
-    }
-
-    // Update to processing
     results[i] = { status: 'processing' };
     renderFileList();
     updateButtonStates();
